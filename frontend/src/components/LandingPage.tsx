@@ -1,12 +1,9 @@
 import React from "react";
 import "./LandingPage.css";
+import Profile from "./Profile";
 
 const LandingPage: React.FC = () => {
-  return (
-    <div className="container">
-      <button className="button">Get Started</button>
-    </div>
-  );
+  return <Profile></Profile>;
 };
 
 export default LandingPage;
