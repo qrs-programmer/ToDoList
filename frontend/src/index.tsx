@@ -1,4 +1,3 @@
-// index.tsx or App.tsx
 import { Auth0Provider } from "@auth0/auth0-react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
@@ -9,7 +8,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     clientId={process.env.REACT_APP_AUTH0_CLIENT_ID!}
     authorizationParams={{
       redirect_uri: window.location.origin,
-      audience: process.env.REACT_APP_AUTH0_AUDIENCE, // Optional, if using API auth
+      audience: process.env.REACT_APP_AUTH0_AUDIENCE,
     }}
   >
     <App />
