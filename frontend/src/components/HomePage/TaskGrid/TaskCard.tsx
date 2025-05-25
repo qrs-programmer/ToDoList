@@ -2,6 +2,7 @@ import React from "react";
 import { Task } from "../../../models/task.model";
 import "./TaskCard.css";
 import DeleteTaskButton from "./DeleteTaskButton";
+import EditTaskButton from "./EditTaskButton";
 
 type TaskCardProps = {
   task: Task;
@@ -29,6 +30,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onTaskCreated }) => {
         task={task}
         onTaskCreated={onTaskCreated}
       ></DeleteTaskButton>
+      <EditTaskButton
+        taskToEdit={task}
+        onTaskCreated={onTaskCreated}
+      ></EditTaskButton>
     </div>
   );
 };

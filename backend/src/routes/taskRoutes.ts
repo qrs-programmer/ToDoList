@@ -42,4 +42,23 @@ router.post("/", async (req: any, res: any) => {
       }
   });
 
+  //Edit a task
+router.put("/:id", async (req: any, res: any) => {
+    try {
+      const updatedTask = await Task.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+      if (!updatedTask) {
+        return res.status(404).json({message:"Task not found!"});
+      }
+      
+      res.status(200).json({message: "Task updated successfully", task: updatedTask});
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
   export default router;

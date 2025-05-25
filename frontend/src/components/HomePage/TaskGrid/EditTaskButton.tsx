@@ -1,25 +1,29 @@
 import React, { useState } from "react";
 import CreateTaskModal from "./CreateTaskModal";
+import { Task } from "../../../models/task.model";
 
-type CreateTaskButtonProps = {
+type EditTaskButtonProps = {
   onTaskCreated: any;
+  taskToEdit: Task;
 };
 
-const CreateTaskButton: React.FC<CreateTaskButtonProps> = ({
+const EditTaskButton: React.FC<EditTaskButtonProps> = ({
   onTaskCreated,
+  taskToEdit,
 }) => {
   const [showModal, setShowModal] = useState(false);
   return (
     <div>
-      <button onClick={() => setShowModal(true)}>Add Task</button>
+      <button onClick={() => setShowModal(true)}>Edit Task</button>
       <CreateTaskModal
         show={showModal}
         onClose={() => setShowModal(false)}
         onTaskCreated={onTaskCreated}
-        operationType="create"
+        operationType="update"
+        taskToEdit={taskToEdit}
       ></CreateTaskModal>
     </div>
   );
 };
 
-export default CreateTaskButton;
+export default EditTaskButton;
