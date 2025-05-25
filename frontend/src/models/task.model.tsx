@@ -5,4 +5,5 @@ export interface Task {
   points: Number;
   completed?: Boolean;
   createdAt?: Date;
+  _id?: any;
 }

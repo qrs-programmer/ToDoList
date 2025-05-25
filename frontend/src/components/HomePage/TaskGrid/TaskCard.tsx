@@ -1,12 +1,14 @@
 import React from "react";
 import { Task } from "../../../models/task.model";
 import "./TaskCard.css";
+import DeleteTaskButton from "./DeleteTaskButton";
 
 type TaskCardProps = {
   task: Task;
+  onTaskCreated: any;
 };
 
-const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, onTaskCreated }) => {
   const formattedDate = task.createdAt
     ? new Date(task.createdAt).toLocaleDateString()
     : "N/A";
@@ -23,6 +25,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
         </span>
       </p>
       <p className="task-date">Created on: {formattedDate}</p>
+      <DeleteTaskButton
+        task={task}
+        onTaskCreated={onTaskCreated}
+      ></DeleteTaskButton>
     </div>
   );
 };

@@ -13,7 +13,7 @@ const HomePage: React.FC = () => {
   const [fetchTrigger, setFetchTrigger] = useState(false);
 
   const handleTaskCreated = () => {
-    setFetchTrigger((prev) => !prev); // toggles state to trigger useEffect
+    setFetchTrigger((prev) => !prev);
   };
 
   const [tasks, setTasks] = useState<Task[]>([]);

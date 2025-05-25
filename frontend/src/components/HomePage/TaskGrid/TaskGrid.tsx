@@ -21,7 +21,11 @@ const TaskGrid: React.FC<TaskGridProps> = ({ tasks, onTaskCreated }) => {
         }}
       >
         {tasks.map((task) => (
-          <TaskCard task={task}></TaskCard>
+          <TaskCard
+            key={task._id}
+            task={task}
+            onTaskCreated={onTaskCreated}
+          ></TaskCard>
         ))}
       </div>
       <CreateTaskButton onTaskCreated={onTaskCreated}></CreateTaskButton>
