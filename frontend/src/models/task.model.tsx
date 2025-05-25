@@ -1,6 +1,8 @@
 export interface Task {
   userId: String;
   title: String;
-  completed: Boolean;
-  createdAt: Date;
+  description: String;
+  points: Number;
+  completed?: Boolean;
+  createdAt?: Date;
 }

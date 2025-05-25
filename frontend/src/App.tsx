@@ -10,7 +10,7 @@ import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import LandingPage from "./components/LandingPage";
-import HomePage from "./components/HomePage";
+import HomePage from "./components/HomePage/HomePage";
 import Callback from "./components/Callback";
 
 function App() {
