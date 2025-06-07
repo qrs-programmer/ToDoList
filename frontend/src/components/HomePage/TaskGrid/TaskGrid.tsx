@@ -14,7 +14,7 @@ const TaskGrid: React.FC<TaskGridProps> = ({ tasks, onTaskCreated }) => {
   const { selectedCategory } = useCategories();
 
   const visibleTasks = selectedCategory
-    ? tasks.filter((task) => task.category === selectedCategory._id)
+    ? tasks.filter((task) => task.category?._id === selectedCategory._id)
     : tasks;
   return (
     <div className="task-grid-container">

@@ -32,9 +32,8 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const category = categories.find(
-      (category) => category._id === selectedCategoryId
-    );
+    const category = categories.find((cat) => cat._id === selectedCategoryId);
+    console.log(category);
 
     const newTask: Task = {
       userId,

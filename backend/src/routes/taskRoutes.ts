@@ -6,7 +6,7 @@ const router = express.Router();
 router.get("/", async (req: any, res: any) => {
   try {
     const userId = req.query.userId as string;
-    const tasks = await Task.find({ userId });
+    const tasks = await Task.find({ userId }).populate("category");
     res.json(tasks);
   } catch (error) {
     console.error(error);
