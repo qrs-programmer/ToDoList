@@ -1,25 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./HomePage.css";
-import Profile from "../Profile";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import { Task } from "../../models/task.model";
 import TaskGrid from "./TaskGrid/TaskGrid";
-import { Category } from "../../models/category.model";
 import Sidebar from "./Sidebar";
+import { useCategories } from "../../context/CategoryContext";
 
 const HomePage: React.FC = () => {
   const { user } = useAuth0();
   const userId = user?.sub;
   console.log(userId);
   const [fetchTrigger, setFetchTrigger] = useState(false);
-
+  const { selectedCategory } = useCategories();
   const handleTaskCreated = () => {
     setFetchTrigger((prev) => !prev);
   };
 
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
 
   // Fetch all tasks
   const fetchTasks = async () => {
@@ -42,7 +40,9 @@ const HomePage: React.FC = () => {
     <div className="home-page">
       <Sidebar />
       <div className="main-content">
-        <h1>Home Page</h1>
+        <p className="category-title">
+          {selectedCategory ? selectedCategory?.title : "All Tasks"}
+        </p>
         <TaskGrid tasks={tasks} onTaskCreated={handleTaskCreated} />
       </div>
     </div>

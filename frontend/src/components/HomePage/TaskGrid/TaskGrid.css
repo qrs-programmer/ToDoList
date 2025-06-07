@@ -1,13 +1,24 @@
 .task-grid-container {
-  padding: 1rem;
+  padding: 2rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center the entire grid + button */
+  align-items: flex-start; /* Left align content */
+}
+
+.task-grid-container h1 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  padding-left: 0.2rem;
+  color: #222;
 }
 
 .task-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center; /* Center the task cards horizontally */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.2rem;
+  width: 100%;
+  padding-bottom: .5rem;
 }

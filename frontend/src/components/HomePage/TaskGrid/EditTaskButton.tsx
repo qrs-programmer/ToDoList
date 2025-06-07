@@ -14,7 +14,7 @@ const EditTaskButton: React.FC<EditTaskButtonProps> = ({
   const [showModal, setShowModal] = useState(false);
   return (
     <div>
-      <button onClick={() => setShowModal(true)}>Edit Task</button>
+      <button onClick={() => setShowModal(true)}>Edit</button>
       <CreateTaskModal
         show={showModal}
         onClose={() => setShowModal(false)}

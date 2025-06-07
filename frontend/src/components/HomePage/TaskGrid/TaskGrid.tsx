@@ -18,13 +18,14 @@ const TaskGrid: React.FC<TaskGridProps> = ({ tasks, onTaskCreated }) => {
     : tasks;
   return (
     <div className="task-grid-container">
-      <h1>{selectedCategory?.title}</h1>
       <div className="task-grid">
         {visibleTasks.map((task) => (
           <TaskCard key={task._id} task={task} onTaskCreated={onTaskCreated} />
         ))}
       </div>
-      <CreateTaskButton onTaskCreated={onTaskCreated} />
+      <div>
+        <CreateTaskButton onTaskCreated={onTaskCreated} />
+      </div>
     </div>
   );
 };

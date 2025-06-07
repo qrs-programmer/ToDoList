@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Task } from "../../../models/task.model";
 import "./TaskCard.css";
 import DeleteTaskButton from "./DeleteTaskButton";
@@ -10,31 +10,57 @@ type TaskCardProps = {
 };
 
 const TaskCard: React.FC<TaskCardProps> = ({ task, onTaskCreated }) => {
+  const [showMenu, setShowMenu] = useState(false);
   const formattedDate = task.createdAt
     ? new Date(task.createdAt).toLocaleDateString()
     : "N/A";
 
   return (
     <div className="task-card">
-      <h3 className="task-title">{task.title}</h3>
-      <p>{task.description}</p>
-      <p>Task Points: {task?.points?.toString()}</p>
-      {task.category && <p>Project: {task.category.title}</p>}
+      <div className="task-card-header">
+        <h3 className="task-title">{task.title}</h3>
+        <div className="options-menu-wrapper">
+          <button
+            className="dots-button"
+            onClick={() => setShowMenu((prev) => !prev)}
+          >
+            &#x22EE;
+          </button>
+          {showMenu && (
+            <>
+              <div
+                className="options-menu-overlay"
+                onClick={() => setShowMenu(!showMenu)}
+              />
+              <div className="options-menu">
+                <DeleteTaskButton
+                  task={task}
+                  onTaskCreated={onTaskCreated}
+                ></DeleteTaskButton>
+                <EditTaskButton
+                  taskToEdit={task}
+                  onTaskCreated={onTaskCreated}
+                ></EditTaskButton>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
       <p className="task-status">
-        Status:{" "}
+        <span
+          className={task.completed ? "dot-completed" : "dot-incomplete"}
+        ></span>
         <span className={task.completed ? "completed" : "incomplete"}>
           {task.completed ? "Completed" : "Incomplete"}
         </span>
       </p>
-      <p className="task-date">Created on: {formattedDate}</p>
-      <DeleteTaskButton
-        task={task}
-        onTaskCreated={onTaskCreated}
-      ></DeleteTaskButton>
-      <EditTaskButton
-        taskToEdit={task}
-        onTaskCreated={onTaskCreated}
-      ></EditTaskButton>
+      <p className="task-points">🏆 Points: {task?.points?.toString()}</p>
+
+      <p className="task-category">
+        📁 Project: {task.category ? task.category.title : "None"}
+      </p>
+
+      <p className="task-date">📅 Created: {formattedDate}</p>
     </div>
   );
 };

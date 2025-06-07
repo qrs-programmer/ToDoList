@@ -10,3 +10,14 @@
   padding: 2rem;
   overflow-y: auto;
 }
+
+.category-title {
+  font-size: 1.4rem;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  color: #1f2937; /* Slate-800 for modern, subdued text */
+  margin-bottom: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb; /* subtle divider */
+  padding-bottom: 0.5rem;
+}

@@ -1,0 +1,29 @@
+.add-task-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: #f4f4f5;
+  color: #333;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  padding: 0.5rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.add-task-button:hover {
+  background-color: #e5e7eb;
+  color: #111827;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+}
+
+.plus-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+  margin-top: -1px;
+  color: #4b5563; /* gray-600 */
+}
