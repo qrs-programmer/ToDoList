@@ -13,7 +13,6 @@ const Profile: React.FC = () => {
         <button onClick={() => loginWithRedirect()}>Log In</button>
       ) : (
         <div>
-          <p>Welcome, {user?.name}</p>
           <img
             src={user?.picture}
             alt="Profile"

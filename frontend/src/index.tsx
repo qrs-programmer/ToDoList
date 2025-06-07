@@ -1,6 +1,7 @@
 import { Auth0Provider } from "@auth0/auth0-react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import { CategoryProvider } from "./context/CategoryContext";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Auth0Provider
@@ -11,6 +12,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       audience: process.env.REACT_APP_AUTH0_AUDIENCE,
     }}
   >
-    <App />
+    <CategoryProvider>
+      <App />
+    </CategoryProvider>
   </Auth0Provider>
 );

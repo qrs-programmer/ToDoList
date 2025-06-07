@@ -19,6 +19,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onTaskCreated }) => {
       <h3 className="task-title">{task.title}</h3>
       <p>{task.description}</p>
       <p>Task Points: {task?.points?.toString()}</p>
+      {task.category && <p>Project: {task.category.title}</p>}
       <p className="task-status">
         Status:{" "}
         <span className={task.completed ? "completed" : "incomplete"}>

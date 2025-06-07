@@ -5,6 +5,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import { Task } from "../../models/task.model";
 import TaskGrid from "./TaskGrid/TaskGrid";
+import { Category } from "../../models/category.model";
+import Sidebar from "./Sidebar";
 
 const HomePage: React.FC = () => {
   const { user } = useAuth0();
@@ -17,6 +19,7 @@ const HomePage: React.FC = () => {
   };
 
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   // Fetch all tasks
   const fetchTasks = async () => {
@@ -37,9 +40,11 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="home-page">
-      <h1>Home Page</h1>
-      <TaskGrid tasks={tasks} onTaskCreated={handleTaskCreated}></TaskGrid>
-      <Profile></Profile>
+      <Sidebar />
+      <div className="main-content">
+        <h1>Home Page</h1>
+        <TaskGrid tasks={tasks} onTaskCreated={handleTaskCreated} />
+      </div>
     </div>
   );
 };

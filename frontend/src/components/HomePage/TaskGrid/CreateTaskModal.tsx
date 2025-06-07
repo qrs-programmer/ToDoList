@@ -3,6 +3,7 @@ import "./CreateTaskModal.css";
 import { Task } from "../../../models/task.model";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
+import { useCategories } from "../../../context/CategoryContext";
 
 type CreateTaskModalProps = {
   show: boolean;
@@ -19,9 +20,11 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
   operationType,
   taskToEdit,
 }) => {
+  const { categories } = useCategories();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [points, setPoints] = useState(0);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
 
   const { user } = useAuth0();
   const userId = user?.sub!;
@@ -29,11 +32,16 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const category = categories.find(
+      (category) => category._id === selectedCategoryId
+    );
+
     const newTask: Task = {
       userId,
       title,
       description,
       points,
+      category,
     };
 
     try {
@@ -100,6 +108,18 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
             min="0"
             onChange={(e) => setPoints(parseFloat(e.target.value))}
           />
+          <label>Project:</label>
+          <select
+            value={selectedCategoryId}
+            onChange={(e) => setSelectedCategoryId(e.target.value)}
+          >
+            <option value="">Select a category</option>
+            {categories.map((category) => (
+              <option key={category._id} value={category._id}>
+                {category.title}
+              </option>
+            ))}
+          </select>
           <button type="submit">
             {taskToEdit ? "Save Changes" : "Create Task"}
           </button>

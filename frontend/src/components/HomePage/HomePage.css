@@ -1,8 +1,12 @@
 .home-page {
-  align-items: center;
-  justify-content: center;
   display: flex;
-    flex-direction: column;
+  flex-direction: row; /* Align sidebar + main content horizontally */
   height: 100vh;
   width: 100vw;
+}
+
+.main-content {
+  flex: 1; /* Take up remaining space */
+  padding: 2rem;
+  overflow-y: auto;
 }
