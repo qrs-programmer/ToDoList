@@ -40,7 +40,7 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  margin: 0.2rem 0; /* Reduced margin for tighter spacing */
+  margin: 0.2rem 0;
   line-height: 1.4;
 }
 
@@ -73,7 +73,7 @@
 }
 
 /* Dots button */
-.dots-button {
+.dots-button-vertical {
   background: none;
   border: none;
   font-size: 1.2rem;
@@ -124,6 +124,14 @@
 }
 
 .dot-completed {
+  background-color: #6828a7;
+  height: 9px;
+  width: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-todo {
   background-color: #28a745;
   height: 9px;
   width: 9px;
@@ -131,8 +139,8 @@
   display: inline-block;
 }
 
-.dot-incomplete {
-  background-color: #dc3545;
+.dot-active {
+  background-color: #2352ff;
   height: 9px;
   width: 9px;
   border-radius: 50%;

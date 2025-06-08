@@ -24,6 +24,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [points, setPoints] = useState(0);
+  const [status, setStatus] = useState("todo");
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
 
   const { user } = useAuth0();
@@ -41,6 +42,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
       description,
       points,
       category,
+      status,
     };
 
     try {
@@ -99,6 +101,12 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
+          <label>Status:</label>
+          <select value={status} onChange={(e) => setStatus(e.target.value)}>
+            <option value="todo">To Do</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
           <label>Task Points:</label>
           <input
             type="number"

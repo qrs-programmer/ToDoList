@@ -21,7 +21,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onTaskCreated }) => {
         <h3 className="task-title">{task.title}</h3>
         <div className="options-menu-wrapper">
           <button
-            className="dots-button"
+            className="dots-button-vertical"
             onClick={() => setShowMenu((prev) => !prev)}
           >
             &#x22EE;
@@ -48,10 +48,20 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onTaskCreated }) => {
       </div>
       <p className="task-status">
         <span
-          className={task.completed ? "dot-completed" : "dot-incomplete"}
+          className={
+            task.status === "todo"
+              ? "dot-todo"
+              : task.status === "active"
+              ? "dot-active"
+              : "dot-completed"
+          }
         ></span>
         <span className={task.completed ? "completed" : "incomplete"}>
-          {task.completed ? "Completed" : "Incomplete"}
+          {task.status === "todo"
+            ? "ToDo"
+            : task.status === "active"
+            ? "Active"
+            : "Completed"}
         </span>
       </p>
       <p className="task-points">🏆 Points: {task?.points?.toString()}</p>

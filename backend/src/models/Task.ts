@@ -7,6 +7,7 @@ const taskSchema = new mongoose.Schema({
   points: Number,
   category: { type: Schema.Types.ObjectId, ref: "Category" },
   completed: { type: Boolean, default: false },
+  status: {type: String, default: "todo"},
   createdAt: { type: Date, default: Date.now }
 });
 

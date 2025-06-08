@@ -16,13 +16,51 @@ const TaskGrid: React.FC<TaskGridProps> = ({ tasks, onTaskCreated }) => {
   const visibleTasks = selectedCategory
     ? tasks.filter((task) => task.category?._id === selectedCategory._id)
     : tasks;
+  const todoTasks = visibleTasks
+    ? visibleTasks.filter((task) => task.status === "todo")
+    : null;
+  const activeTasks = visibleTasks
+    ? visibleTasks.filter((task) => task.status === "active")
+    : null;
+  const completedTasks = visibleTasks
+    ? visibleTasks.filter((task) => task.status === "completed")
+    : null;
+
   return (
     <div className="task-grid-container">
       <div className="task-grid">
-        {visibleTasks.map((task) => (
-          <TaskCard key={task._id} task={task} onTaskCreated={onTaskCreated} />
-        ))}
+        <div className="task-column">
+          <p className="column-title">TODO</p>
+          {todoTasks?.map((task) => (
+            <TaskCard
+              key={task._id}
+              task={task}
+              onTaskCreated={onTaskCreated}
+            />
+          ))}
+        </div>
+        <div className="task-column">
+          <p className="column-title">Active</p>
+          {activeTasks?.map((task) => (
+            <TaskCard
+              key={task._id}
+              task={task}
+              onTaskCreated={onTaskCreated}
+            />
+          ))}
+        </div>
+        <div className="task-column">
+          <p className="column-title">Completed</p>
+          {completedTasks?.map((task) => (
+            <TaskCard
+              key={task._id}
+              task={task}
+              onTaskCreated={onTaskCreated}
+            />
+          ))}
+        </div>
       </div>
+
       <div>
         <CreateTaskButton onTaskCreated={onTaskCreated} />
       </div>

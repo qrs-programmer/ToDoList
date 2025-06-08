@@ -1,11 +1,35 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Sidebar.css";
 import { useCategories } from "../../context/CategoryContext";
 import CreateProjectModal from "./CreateProjectModal";
+import axios from "axios";
 
 const Sidebar: React.FC = () => {
   const { categories, setSelectedCategory } = useCategories();
   const [showModal, setShowModal] = useState(false);
+  const [showMenuIndex, setShowMenuIndex] = useState(-1);
+
+  const { refreshCategories } = useCategories();
+
+  const handleDeleteCategory = async (id: any) => {
+    try {
+      const response = await axios.delete(
+        `${process.env.REACT_APP_API_URL}/api/categories/${id}`
+      );
+      refreshCategories();
+      setShowMenuIndex(-1);
+      setSelectedCategory(null);
+      console.log("Project deleted:", response.data);
+    } catch (error) {
+      console.error("Error deleting project:", error);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = () => setShowMenuIndex(-1);
+    window.addEventListener("click", handleClickOutside);
+    return () => window.removeEventListener("click", handleClickOutside);
+  }, []);
 
   return (
     <aside className="sidebar">
@@ -32,11 +56,37 @@ const Sidebar: React.FC = () => {
       <ul className="category-list">
         {categories.map((category, index) => (
           <li
-            onClick={() => setSelectedCategory(category)}
             key={index}
             className="category-item"
+            onClick={() => setSelectedCategory(category)}
           >
             {category.title}
+
+            <div className="dots-container" style={{ position: "relative" }}>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowMenuIndex(index === showMenuIndex ? -1 : index);
+                }}
+                className="dots-button-horizontal"
+              >
+                &hellip;
+              </button>
+
+              {showMenuIndex === index && (
+                <div className="mini-modal">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteCategory(category._id);
+                      setShowMenuIndex(-1);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
+            </div>
           </li>
         ))}
       </ul>

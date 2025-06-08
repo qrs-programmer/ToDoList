@@ -7,6 +7,7 @@ export interface Task {
   points: Number;
   category?: Category;
   completed?: Boolean;
+  status: String;
   createdAt?: Date;
   _id?: any;
 }
