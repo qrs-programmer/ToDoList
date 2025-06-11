@@ -3,6 +3,8 @@ import { Task } from "../../../models/task.model";
 import "./TaskCard.css";
 import DeleteTaskButton from "./DeleteTaskButton";
 import EditTaskButton from "./EditTaskButton";
+import { updateTask } from "../../../api/tasks";
+import TaskCardDetailsModal from "./TaskCardDetailsModal";
 
 type TaskCardProps = {
   task: Task;
@@ -11,14 +13,44 @@ type TaskCardProps = {
 
 const TaskCard: React.FC<TaskCardProps> = ({ task, onTaskCreated }) => {
   const [showMenu, setShowMenu] = useState(false);
+  const [status, setStatus] = useState(task.status.toString());
+  const [showModal, setShowModal] = useState(false);
+
   const formattedDate = task.createdAt
     ? new Date(task.createdAt).toLocaleDateString()
     : "N/A";
 
+  async function handleStatusUpdate(status: string): Promise<void> {
+    const newTask: Task = {
+      userId: task.userId,
+      title: task.title,
+      description: task.description,
+      points: task.points,
+      category: task.category,
+      status,
+    };
+
+    try {
+      const updated = await updateTask(task._id, newTask);
+      console.log("Task updated:", updated);
+      onTaskCreated();
+    } catch (error) {
+      console.error("Error creating task:", error);
+    }
+  }
+
   return (
     <div className="task-card">
       <div className="task-card-header">
-        <h3 className="task-title">{task.title}</h3>
+        <h3 onClick={() => setShowModal(true)} className="task-title">
+          {task.title}
+        </h3>
+        <TaskCardDetailsModal
+          show={showModal}
+          onClose={() => setShowModal(false)}
+          onTaskCreated={onTaskCreated}
+          task={task}
+        />
         <div className="options-menu-wrapper">
           <button
             className="dots-button-vertical"
@@ -56,13 +88,18 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onTaskCreated }) => {
               : "dot-completed"
           }
         ></span>
-        <span className={task.completed ? "completed" : "incomplete"}>
-          {task.status === "todo"
-            ? "ToDo"
-            : task.status === "active"
-            ? "Active"
-            : "Completed"}
-        </span>
+        <select
+          value={status}
+          onChange={(e) => {
+            setStatus(e.target.value);
+            handleStatusUpdate(e.target.value);
+          }}
+          className="task-status-select"
+        >
+          <option value="todo">Todo</option>
+          <option value="active">Active</option>
+          <option value="completed">Completed</option>
+        </select>
       </p>
       <p className="task-points">🏆 Points: {task?.points?.toString()}</p>
 

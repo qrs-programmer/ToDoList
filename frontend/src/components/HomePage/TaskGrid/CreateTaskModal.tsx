@@ -4,6 +4,7 @@ import { Task } from "../../../models/task.model";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import { useCategories } from "../../../context/CategoryContext";
+import { updateTask } from "../../../api/tasks";
 
 type CreateTaskModalProps = {
   show: boolean;
@@ -53,11 +54,8 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         );
         console.log("Task created:", response.data);
       } else if (operationType === "update") {
-        const response = await axios.put(
-          `${process.env.REACT_APP_API_URL}/api/tasks/${taskToEdit?._id}`,
-          newTask
-        );
-        console.log("Task updated:", response.data);
+        const updated = await updateTask(taskToEdit?._id, newTask);
+        console.log("Task updated:", updated);
       }
       onTaskCreated();
       onClose();
