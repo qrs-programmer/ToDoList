@@ -4,6 +4,9 @@ import dotenv from "dotenv";
 import connectDB from "./config/db";
 import taskRoutes from "./routes/taskRoutes";
 import categoryRoutes from "./routes/categoryRoutes";
+import "./models/Task";
+import "./models/Subtask";
+import subtaskRoutes from "./routes/subtaskRoutes";
 
 dotenv.config();
 
@@ -14,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/tasks", taskRoutes);
+app.use("/api/subtasks", subtaskRoutes);
 app.use("/api/categories", categoryRoutes);
 
 app.get("/", (req: any, res: any) => {

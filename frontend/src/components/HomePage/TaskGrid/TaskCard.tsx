@@ -106,6 +106,12 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onTaskCreated }) => {
       <p className="task-category">
         📁 Project: {task.category ? task.category.title : "None"}
       </p>
+      <p className="task-category">
+        📋{" "}
+        {task.subtasks?.filter((x) => x.completed).length +
+          "/" +
+          task.subtasks?.length}
+      </p>
 
       <p className="task-date">📅 Created: {formattedDate}</p>
     </div>

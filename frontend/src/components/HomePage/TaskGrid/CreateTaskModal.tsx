@@ -5,21 +5,22 @@ import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import { useCategories } from "../../../context/CategoryContext";
 import { updateTask } from "../../../api/tasks";
+import { Subtask } from "../../../models/subtask.model";
 
 type CreateTaskModalProps = {
   show: boolean;
   onClose: () => void;
   onTaskCreated: any;
-  operationType: "create" | "update";
-  taskToEdit?: Task;
+  taskType: "task" | "subtask";
+  task?: Task;
 };
 
 const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
   show,
   onClose,
   onTaskCreated,
-  operationType,
-  taskToEdit,
+  taskType,
+  task,
 }) => {
   const { categories } = useCategories();
   const [title, setTitle] = useState("");
@@ -37,25 +38,38 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
     const category = categories.find((cat) => cat._id === selectedCategoryId);
     console.log(category);
 
-    const newTask: Task = {
-      userId,
-      title,
-      description,
-      points,
-      category,
-      status,
-    };
-
     try {
-      if (operationType === "create") {
+      if (taskType === "task") {
+        const newTask: Task = {
+          userId,
+          title,
+          description,
+          points,
+          category,
+          status,
+          subtasks: [],
+        };
         const response = await axios.post(
           `${process.env.REACT_APP_API_URL}/api/tasks`,
           newTask
         );
         console.log("Task created:", response.data);
-      } else if (operationType === "update") {
-        const updated = await updateTask(taskToEdit?._id, newTask);
-        console.log("Task updated:", updated);
+      } else if (taskType === "subtask") {
+        console.log("CREATING SUBTASK");
+        const newSubtask: Subtask = {
+          userId,
+          parentTask: task!,
+          title,
+          description,
+          points,
+          category,
+          status,
+        };
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/api/subtasks`,
+          newSubtask
+        );
+        console.log("Subtask created:", response.data);
       }
       onTaskCreated();
       onClose();
@@ -65,22 +79,23 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
   };
 
   useEffect(() => {
-    if (show && operationType === "create") {
+    if (show) {
       setTitle("");
       setDescription("");
       setPoints(0);
     }
-
-    if (show && operationType === "update" && taskToEdit) {
-      setTitle(taskToEdit.title.valueOf());
-      setDescription(taskToEdit.description.valueOf());
-      setPoints(taskToEdit.points.valueOf());
-    }
-  }, [show, operationType, taskToEdit]);
+  }, [show]);
 
   if (!show) return null;
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div
+      className="modal-overlay"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
+    >
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <form onSubmit={handleSubmit}>
           <h2>Create Task</h2>
@@ -126,10 +141,10 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
             ))}
           </select>
           <button type="submit">
-            {taskToEdit ? "Save Changes" : "Create Task"}
+            {task ? "Create Subtask" : "Create Task"}
           </button>
         </form>
-        <button onClick={onClose} style={{ marginTop: "1rem" }}>
+        <button onClick={onClose} style={{ marginTop: "1rem", color: "blue" }}>
           Cancel
         </button>
       </div>

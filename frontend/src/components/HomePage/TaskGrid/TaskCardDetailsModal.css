@@ -21,6 +21,7 @@
   padding: 2rem;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow-x: hidden;
 }
 
 .modal-header {
@@ -43,12 +44,6 @@
   font-size: 1.5rem;
   color: #888;
   cursor: pointer;
-}
-
-.modal-content {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
 }
 
 .form-section {
@@ -126,3 +121,45 @@ textarea {
 .secondary-button:hover {
   background-color: #e6f2fb;
 }
+
+.modal-body {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.modal-content {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.subtask-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 0.95rem;
+}
+
+.subtask-heading {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  color: #333;
+}
+
+.subtask-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.subtask-section button {
+  align-self: flex-start;
+}
+

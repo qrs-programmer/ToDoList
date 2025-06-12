@@ -1,8 +1,9 @@
 import { Category } from "./category.model";
-import { Subtask } from "./subtask.model";
+import { Task } from "./task.model";
 
-export interface Task {
+export interface Subtask {
   userId: String;
+  parentTask: Task;
   title: String;
   description: String;
   points: Number;
@@ -11,5 +12,4 @@ export interface Task {
   status: String;
   createdAt?: Date;
   _id?: any;
-  subtasks?: Subtask[];
 }

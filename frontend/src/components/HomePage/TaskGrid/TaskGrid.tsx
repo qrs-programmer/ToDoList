@@ -62,7 +62,7 @@ const TaskGrid: React.FC<TaskGridProps> = ({ tasks, onTaskCreated }) => {
       </div>
 
       <div>
-        <CreateTaskButton onTaskCreated={onTaskCreated} />
+        <CreateTaskButton taskType={"task"} onTaskCreated={onTaskCreated} />
       </div>
     </div>
   );
