@@ -6,12 +6,14 @@ import { useCategories } from "../../../context/CategoryContext";
 import { updateTask } from "../../../api/tasks";
 import CreateTaskButton from "./CreateTaskButton";
 import SubtaskCard from "./SubtaskCard";
+import { Subtask } from "../../../models/subtask.model";
+import axios from "axios";
 
 type TaskCardDetailsModalProps = {
   show: boolean;
   onClose: () => void;
   onTaskCreated: any;
-  task: Task;
+  task: Task | Subtask;
 };
 
 const TaskCardDetailsModal: React.FC<TaskCardDetailsModalProps> = ({
@@ -25,34 +27,87 @@ const TaskCardDetailsModal: React.FC<TaskCardDetailsModalProps> = ({
   const [description, setDescription] = useState("");
   const [points, setPoints] = useState(0);
   const [status, setStatus] = useState(task.status.toString());
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
-  const subtasks = task.subtasks;
+  const [fetchTrigger, setFetchTrigger] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
+    task.category?._id || ""
+  );
+  const [subtasks, setSubtasks] = useState<Subtask[]>([]);
+  function isTask(task: Task | Subtask): task is Task {
+    return "subtasks" in task;
+  }
+
+  //const subtasks = isTask(task) ? task.subtasks : null;
   const { user } = useAuth0();
   const userId = user?.sub!;
+
+  const handleSubtaskCreated = () => {
+    setFetchTrigger((prev) => !prev);
+    onTaskCreated();
+  };
+
+  const fetchTasks = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/subtasks?userId=${userId}&parentTask=${task._id}`
+      );
+      console.log(res.data);
+      setSubtasks(res.data);
+    } catch (error) {
+      console.log("Error fetching subtasks:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTrigger]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const category = categories.find((cat) => cat._id === selectedCategoryId);
     console.log(category);
+    if (isTask(task)) {
+      const newTask: Task = {
+        userId,
+        title,
+        description,
+        points,
+        category,
+        status,
+      };
 
-    const newTask: Task = {
-      userId,
-      title,
-      description,
-      points,
-      category,
-      status,
-    };
+      try {
+        const updated = await updateTask(task._id, newTask);
+        console.log("Task updated:", updated);
 
-    try {
-      const updated = await updateTask(task._id, newTask);
-      console.log("Task updated:", updated);
-
-      onTaskCreated();
-      onClose();
-    } catch (error) {
-      console.error("Error creating task:", error);
+        onTaskCreated();
+        onClose();
+      } catch (error) {
+        console.error("Error creating task:", error);
+      }
+    } else {
+      const parentTask = task.parentTask;
+      const newTask: Subtask = {
+        userId,
+        parentTask,
+        title,
+        description,
+        points,
+        category,
+        status,
+      };
+      try {
+        const response = await axios.put(
+          `${process.env.REACT_APP_API_URL}/api/subtasks/${task._id}`,
+          newTask
+        );
+        onTaskCreated();
+        onClose();
+        return response.data;
+      } catch (error) {
+        console.error("Error updating task:", error);
+        throw error;
+      }
     }
   };
 
@@ -61,6 +116,7 @@ const TaskCardDetailsModal: React.FC<TaskCardDetailsModalProps> = ({
       setTitle(task.title.valueOf());
       setDescription(task.description.valueOf());
       setPoints(task.points.valueOf());
+      setSelectedCategoryId(task.category?._id);
     }
   }, [show, task]);
 
@@ -155,25 +211,36 @@ const TaskCardDetailsModal: React.FC<TaskCardDetailsModalProps> = ({
               </button>
             </div>
           </form>
-          <div className="subtask-section">
-            <p className="subtask-heading">Subtasks</p>
+          {isTask(task) && (
+            <div className="subtask-section">
+              <p className="subtask-heading">Subtasks</p>
 
-            <div className="subtask-grid">
-              {subtasks?.map((subtask) => (
-                <SubtaskCard
-                  key={subtask._id}
-                  subtask={subtask}
-                  onTaskCreated={onTaskCreated}
-                />
-              ))}
+              <div className="subtask-grid">
+                {subtasks?.map((subtask) => (
+                  <SubtaskCard
+                    key={subtask._id}
+                    subtask={subtask}
+                    onTaskCreated={onTaskCreated}
+                  />
+                ))}
+              </div>
+
+              <CreateTaskButton
+                taskType={"subtask"}
+                onTaskCreated={handleSubtaskCreated}
+                task={task}
+              />
             </div>
+          )}
+          {!isTask(task) && (
+            <div className="subtask-section">
+              <p className="subtask-heading">Parent Task</p>
 
-            <CreateTaskButton
-              taskType={"subtask"}
-              onTaskCreated={onTaskCreated}
-              task={task}
-            />
-          </div>
+              <div className="subtask-grid">
+                <p>{task.parentTask.title}</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

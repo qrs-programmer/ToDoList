@@ -22,12 +22,14 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
   taskType,
   task,
 }) => {
-  const { categories } = useCategories();
+  const { categories, selectedCategory } = useCategories();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [points, setPoints] = useState(0);
   const [status, setStatus] = useState("todo");
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
+    selectedCategory?._id || ""
+  );
 
   const { user } = useAuth0();
   const userId = user?.sub!;
@@ -83,6 +85,10 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
       setTitle("");
       setDescription("");
       setPoints(0);
+      setSelectedCategoryId(selectedCategory?._id);
+    }
+    if (!show) {
+      setSelectedCategoryId("");
     }
   }, [show]);
 
@@ -133,7 +139,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
             value={selectedCategoryId}
             onChange={(e) => setSelectedCategoryId(e.target.value)}
           >
-            <option value="">Select a category</option>
+            <option value="">Select a project</option>
             {categories.map((category) => (
               <option key={category._id} value={category._id}>
                 {category.title}
