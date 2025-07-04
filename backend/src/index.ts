@@ -7,6 +7,9 @@ import categoryRoutes from "./routes/categoryRoutes";
 import "./models/Task";
 import "./models/Subtask";
 import subtaskRoutes from "./routes/subtaskRoutes";
+import googleAuthRoutes from "./routes/googleAuthRoutes";
+import userRoutes from "./routes/userRoutes";
+import calendarRoutes from "./routes/calendarRoutes";
 
 dotenv.config();
 
@@ -16,9 +19,12 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
+app.use("/auth/google", googleAuthRoutes);
+app.use("/api/google/events", calendarRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/subtasks", subtaskRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/users", userRoutes);
 
 app.get("/", (req: any, res: any) => {
   res.send("API is running...");

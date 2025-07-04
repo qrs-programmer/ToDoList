@@ -8,7 +8,7 @@ import Sidebar from "./Sidebar";
 import { useCategories } from "../../context/CategoryContext";
 
 const HomePage: React.FC = () => {
-  const { user } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
   const userId = user?.sub;
   console.log(userId);
   const [fetchTrigger, setFetchTrigger] = useState(false);
@@ -18,6 +18,24 @@ const HomePage: React.FC = () => {
   };
 
   const [tasks, setTasks] = useState<Task[]>([]);
+
+  useEffect(() => {
+    const createUser = async () => {
+      if (!user || !isAuthenticated) return;
+
+      try {
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/users`, {
+          auth0Id: user.sub,
+          email: user.email,
+        });
+        console.log("User created or already exists");
+      } catch (error) {
+        console.error("Failed to create user:", error);
+      }
+    };
+
+    createUser();
+  }, [user, isAuthenticated]);
 
   // Fetch all tasks
   const fetchTasks = async () => {

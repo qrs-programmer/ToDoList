@@ -3,14 +3,36 @@ import "./Sidebar.css";
 import { useCategories } from "../../context/CategoryContext";
 import CreateProjectModal from "./CreateProjectModal";
 import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Sidebar: React.FC = () => {
+  const { user, isAuthenticated } = useAuth0();
   const { categories, setSelectedCategory } = useCategories();
   const [showModal, setShowModal] = useState(false);
   const [showMenuIndex, setShowMenuIndex] = useState(-1);
 
   const { refreshCategories } = useCategories();
 
+  const syncGoogleCalendar = async () => {
+    window.location.href = `http://localhost:5000/auth/google/auth0Id?auth0Id=${user?.sub}`;
+  };
+
+  const createEventTest = async () => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/google/events/create-event`,
+        {
+          userId: user?.sub,
+          summary: "Test Event from Frontend",
+          startTime: "2025-07-05T10:00:00-04:00",
+          endTime: "2025-07-05T11:00:00-04:00",
+        }
+      );
+      console.log("Event created:", response.data);
+    } catch (error) {
+      console.error("Error creating event:", error);
+    }
+  };
   const handleDeleteCategory = async (id: any) => {
     try {
       const response = await axios.delete(
@@ -90,6 +112,20 @@ const Sidebar: React.FC = () => {
           </li>
         ))}
       </ul>
+      <button
+        onClick={(e) => {
+          syncGoogleCalendar();
+        }}
+      >
+        Sync Calendar
+      </button>
+      <button
+        onClick={(e) => {
+          createEventTest();
+        }}
+      >
+        Create Test Event
+      </button>
     </aside>
   );
 };
