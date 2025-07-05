@@ -10,6 +10,7 @@ import subtaskRoutes from "./routes/subtaskRoutes";
 import googleAuthRoutes from "./routes/googleAuthRoutes";
 import userRoutes from "./routes/userRoutes";
 import calendarRoutes from "./routes/calendarRoutes";
+import calendarSyncRoutes from "./routes/calendarSyncRoutes";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(express.json());
 
 app.use("/auth/google", googleAuthRoutes);
 app.use("/api/google/events", calendarRoutes);
+app.use("/api/google/sync", calendarSyncRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/subtasks", subtaskRoutes);
 app.use("/api/categories", categoryRoutes);

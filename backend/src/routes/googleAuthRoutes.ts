@@ -2,6 +2,7 @@ import express from "express";
 import { getAuthUrl, getTokens, getOAuthClient, oauth2Client } from "../services/googleAuth";
 import User from "../models/User";
 import { google } from "googleapis";
+import { syncAllTasks } from "../services/googleCalendarService";
 
 const router = express.Router();
 
@@ -34,8 +35,10 @@ router.get("/callback", async (req: any, res: any) => {
           refreshToken: tokens.refresh_token,
           expiryDate: tokens.expiry_date,
         },
+        googleSyncActive: true
       }
     );
+    await syncAllTasks(auth0Id);
     res.redirect(`http://localhost:3000/home`);
   } catch (err) {
     console.error("Google Auth failed", err);

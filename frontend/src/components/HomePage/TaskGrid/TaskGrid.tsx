@@ -17,13 +17,19 @@ const TaskGrid: React.FC<TaskGridProps> = ({ tasks, onTaskCreated }) => {
     ? tasks.filter((task) => task.category?._id === selectedCategory._id)
     : tasks;
   const todoTasks = visibleTasks
-    ? visibleTasks.filter((task) => task.status === "todo")
+    ? visibleTasks.filter(
+        (task) => task.status === "todo" && task.deleted === false
+      )
     : null;
   const activeTasks = visibleTasks
-    ? visibleTasks.filter((task) => task.status === "active")
+    ? visibleTasks.filter(
+        (task) => task.status === "active" && task.deleted === false
+      )
     : null;
   const completedTasks = visibleTasks
-    ? visibleTasks.filter((task) => task.status === "completed")
+    ? visibleTasks.filter(
+        (task) => task.status === "completed" && task.deleted === false
+      )
     : null;
 
   return (

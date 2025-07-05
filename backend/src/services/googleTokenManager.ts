@@ -5,7 +5,10 @@ import User from "../models/User";
 
 export async function getAuthorizedOAuthClient(userId: string) {
   const user = await User.findOne({ auth0Id: userId });
-  if (!user || !user.googleTokens) throw new Error("Google not connected");
+  console.log(userId);
+  if (!user) throw new Error("Can't find user");
+  if (!user.googleTokens) throw new Error("User token object is null");
+
 
   const oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,

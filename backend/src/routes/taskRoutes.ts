@@ -1,5 +1,7 @@
 import express from "express";
 import Task from "../models/Task"; 
+import { createGoogleCalendarEvent, deleteGoogleCalendarEvent, updateGoogleCalendarEvent } from "../services/googleCalendarService";
+import User from "../models/User";
 
 const router = express.Router();
 
@@ -19,6 +21,15 @@ router.get("/", async (req: any, res: any) => {
 router.post("/", async (req: any, res: any) => {
     try {
       const task = new Task(req.body);
+      
+      const user = await User.findOne({ auth0Id: task.userId })
+
+      if (user?.googleSyncActive) {
+        const res = await createGoogleCalendarEvent(task, task.userId);
+        console.log(res);
+        task.googleEventId = res;
+      }
+      
       await task.save();
       res.status(201).json(task);
     } catch (error) {
@@ -30,10 +41,19 @@ router.post("/", async (req: any, res: any) => {
   // Delete a task
   router.delete("/:id", async (req: any, res:any) => {
     try {
-        const deletedTask = await Task.findByIdAndDelete(req.params.id);
+        const deletedTask = await Task.findById(req.params.id);
 
         if (!deletedTask){
           return res.status(404).json({message:"Task not found!"});
+        }
+
+        deletedTask.deleted = true;
+        await deletedTask.save();
+
+        const user = await User.findOne({ auth0Id: deletedTask.userId })
+
+        if (user?.googleSyncActive && deletedTask.googleEventId) {
+          await deleteGoogleCalendarEvent(deletedTask.googleEventId, deletedTask.userId);
         }
 
         res.status(200).json({message: "Task deleted successfully", task: deletedTask});
@@ -54,6 +74,13 @@ router.put("/:id", async (req: any, res: any) => {
       if (!updatedTask) {
         return res.status(404).json({message:"Task not found!"});
       }
+
+      const user = await User.findOne({ auth0Id: updatedTask.userId })
+
+      if (user?.googleSyncActive && updatedTask.googleEventId) {
+        await updateGoogleCalendarEvent(updatedTask, updatedTask.userId);
+      }
+
       
       res.status(200).json({message: "Task updated successfully", task: updatedTask});
     } catch (error) {

@@ -12,4 +12,6 @@ export interface Task {
   createdAt?: Date;
   _id?: any;
   subtasks?: Subtask[];
+  syncedWithGoogle?: boolean;
+  deleted?: boolean;
 }

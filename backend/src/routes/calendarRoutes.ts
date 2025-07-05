@@ -11,15 +11,9 @@ router.post("/create-event", async (req, res) => {
     const { userId, summary, startTime, endTime } = req.body;
 
     const auth = await getAuthorizedOAuthClient(userId);
-    if (auth) {
-        console.log("yay auth");
-    }
-    else console.log("nay auth");
+    
     const calendar = google.calendar({ version: "v3", auth });
-    if (calendar) {
-        console.log("yay calendar");
-    }
-    else console.log("nay calendar");
+   
     const event = await calendar.events.insert({
       calendarId: "primary",
       requestBody: {

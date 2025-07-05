@@ -14,6 +14,23 @@ router.get("/", async (req: any, res: any) => {
   }
 });
 
+router.get("/getUser", async (req:any, res:any) => {
+  try {
+    const auth0Id = req.query.auth0Id as string;
+    const user = await User.findOne({ auth0Id: auth0Id });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json({
+      email: user.email,
+      authId: user.auth0Id,
+      googleSyncActive: user.googleSyncActive, // ✅ include this
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 // Add a user
 router.post("/", async (req: any, res: any) => {
   try {
@@ -36,6 +53,25 @@ router.post("/", async (req: any, res: any) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+// routes/userRoutes.ts
+router.put("/sync-toggle", async (req: any, res: any) => {
+  const { authId, googleSyncActive } = req.body;
+
+  try {
+    const user = await User.findOneAndUpdate(
+      { authId },
+      { googleSyncActive },
+      { new: true }
+    );
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json(user);
+  } catch (err) {
+    console.error("Sync toggle error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 
 export default router;

@@ -10,27 +10,38 @@ const Sidebar: React.FC = () => {
   const { categories, setSelectedCategory } = useCategories();
   const [showModal, setShowModal] = useState(false);
   const [showMenuIndex, setShowMenuIndex] = useState(-1);
+  const [userSyncStatus, setUserSyncStatus] = useState(false);
 
   const { refreshCategories } = useCategories();
 
   const syncGoogleCalendar = async () => {
-    window.location.href = `http://localhost:5000/auth/google/auth0Id?auth0Id=${user?.sub}`;
-  };
-
-  const createEventTest = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/google/events/create-event`,
-        {
-          userId: user?.sub,
-          summary: "Test Event from Frontend",
-          startTime: "2025-07-05T10:00:00-04:00",
-          endTime: "2025-07-05T11:00:00-04:00",
-        }
+        `${process.env.REACT_APP_API_URL}/api/google/sync`,
+        { userId: user?.sub }
       );
-      console.log("Event created:", response.data);
+      console.log(response);
+      if (response.data.redirectToConsent) {
+        // Redirect to OAuth consent flow
+        window.location.href = `http://localhost:5000/auth/google/auth0Id?auth0Id=${user?.sub}`;
+      } else {
+        // Show success message / update UI
+        console.log("Tasks synced to Google Calendar!");
+      }
+    } catch (err) {
+      console.error("Error syncing:", err);
+    }
+  };
+
+  const getUserSyncStatus = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/users/getUser?auth0Id=${user?.sub}`
+      );
+      setUserSyncStatus(response.data.googleSyncActive);
+      console.log("Sync Status:", response.data.googleSyncActive);
     } catch (error) {
-      console.error("Error creating event:", error);
+      console.error("Error getting sync status:", error);
     }
   };
   const handleDeleteCategory = async (id: any) => {
@@ -48,6 +59,7 @@ const Sidebar: React.FC = () => {
   };
 
   useEffect(() => {
+    getUserSyncStatus();
     const handleClickOutside = () => setShowMenuIndex(-1);
     window.addEventListener("click", handleClickOutside);
     return () => window.removeEventListener("click", handleClickOutside);
@@ -113,18 +125,26 @@ const Sidebar: React.FC = () => {
         ))}
       </ul>
       <button
+        className="google-sync-button"
         onClick={(e) => {
           syncGoogleCalendar();
         }}
       >
-        Sync Calendar
-      </button>
-      <button
-        onClick={(e) => {
-          createEventTest();
-        }}
-      >
-        Create Test Event
+        {!userSyncStatus && (
+          <img
+            src="/assets/google-calendar-icon.png"
+            alt="Google Calendar"
+            className="google-calendar-logo"
+          />
+        )}
+        {userSyncStatus && (
+          <img
+            src="/assets/check.png"
+            alt="Sync Status"
+            className="google-calendar-logo"
+          />
+        )}
+        {userSyncStatus ? "Calendar Synced" : "Connect Google Calendar"}
       </button>
     </aside>
   );
