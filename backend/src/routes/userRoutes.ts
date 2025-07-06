@@ -54,13 +54,12 @@ router.post("/", async (req: any, res: any) => {
   }
 });
 
-// routes/userRoutes.ts
 router.put("/sync-toggle", async (req: any, res: any) => {
-  const { authId, googleSyncActive } = req.body;
+  const { auth0Id, googleSyncActive } = req.body;
 
   try {
     const user = await User.findOneAndUpdate(
-      { authId },
+      { auth0Id },
       { googleSyncActive },
       { new: true }
     );
@@ -71,7 +70,5 @@ router.put("/sync-toggle", async (req: any, res: any) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-
-
 
 export default router;

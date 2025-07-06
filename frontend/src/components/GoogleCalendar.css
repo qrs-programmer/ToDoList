@@ -1,0 +1,74 @@
+.google-sync-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  background-color: #fff;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3),
+              0 1px 3px 1px rgba(60, 64, 67, 0.15);
+}
+
+.google-sync-toggle:hover {
+  box-shadow: 0 2px 4px rgba(60, 64, 67, 0.3),
+              0 4px 6px 2px rgba(60, 64, 67, 0.15);
+}
+
+.google-calendar-logo {
+  width: 30px;
+  height: 30px;
+  transition: filter 0.3s ease;
+  filter: grayscale(100%) brightness(1.2);
+}
+
+.google-calendar-logo.synced {
+  filter: none; 
+}
+
+/* Switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 20px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #4285F4;
+}
+
+input:checked + .slider:before {
+  transform: translateX(16px);
+}
+

@@ -80,10 +80,19 @@ export async function syncAllTasks(userId: string) {
         };
   
         if (task.googleEventId && task.deleted){
-          await calendar.events.delete({
-            calendarId: "primary",
-            eventId: task.googleEventId,
-          });
+          try {
+            await calendar.events.delete({
+              calendarId: "primary",
+              eventId: task.googleEventId,
+            });
+            console.log(`Deleted event: ${task.googleEventId}`);
+          } catch (error: any) {
+            if (error.code === 404) {
+              console.warn(`Event ${task.googleEventId} not found in Google Calendar.`);
+            } else {
+              console.error("Failed to delete calendar event:", error);
+            }
+          }
           await Task.findByIdAndDelete(task._id);
         }
         else if (!task.googleEventId) {

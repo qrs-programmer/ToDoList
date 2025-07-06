@@ -8,8 +8,6 @@ const router = express.Router();
 
 router.post("/", async (req: any, res: any) => {
   const { userId } = req.body;
-  console.log(req.body);
-  console.log(userId);
   try {
     // See if user is connected to Google Calendar
     const user = await User.findOne({ auth0Id: userId });
@@ -20,6 +18,11 @@ router.post("/", async (req: any, res: any) => {
     }
 
     // If user is connected, sync tasks
+    const user1 = await User.findOneAndUpdate(
+          { auth0Id: userId },
+          { googleSyncActive: true },
+          { new: true}
+        );
     await syncAllTasks(userId);
 
     res.status(200).json({ message: "Tasks synced with Google Calendar" });
