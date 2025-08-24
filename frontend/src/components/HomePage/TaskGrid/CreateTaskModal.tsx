@@ -31,6 +31,10 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
     selectedCategory?._id || ""
   );
 
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [duration, setDuration] = useState(60);
+
   const { user } = useAuth0();
   const userId = user?.sub!;
 
@@ -41,6 +45,14 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
     console.log(category);
 
     try {
+      let start = new Date();
+      let end = new Date(start.getTime() + 60 * 60000);
+      console.log(start.getHours());
+      console.log(start.getDate());
+      if (date !== "" && time !== "") {
+        start = new Date(`${date}T${time}`);
+        end = new Date(start.getTime() + duration * 60000);
+      }
       if (taskType === "task") {
         const newTask: Task = {
           userId,
@@ -50,6 +62,11 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
           category,
           status,
           subtasks: [],
+          timeBlock: {
+            start,
+            end,
+            durationMinutes: duration,
+          },
         };
         const response = await axios.post(
           `${process.env.REACT_APP_API_URL}/api/tasks`,
@@ -66,6 +83,11 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
           points,
           category,
           status,
+          timeBlock: {
+            start,
+            end,
+            durationMinutes: duration,
+          },
         };
         const response = await axios.post(
           `${process.env.REACT_APP_API_URL}/api/subtasks`,
@@ -146,6 +168,34 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
               </option>
             ))}
           </select>
+          <div className="date-time-group">
+            <label>
+              Date:
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </label>
+            <label>
+              Start Time:
+              <input
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+              />
+            </label>
+            <label>
+              Duration (minutes):
+              <input
+                type="number"
+                min={15}
+                step={15}
+                value={duration}
+                onChange={(e) => setDuration(Number(e.target.value))}
+              />
+            </label>
+          </div>
           <button type="submit">
             {task ? "Create Subtask" : "Create Task"}
           </button>

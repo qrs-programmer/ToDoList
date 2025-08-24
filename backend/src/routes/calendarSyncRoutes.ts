@@ -18,14 +18,26 @@ router.post("/", async (req: any, res: any) => {
     }
 
     // If user is connected, sync tasks
-    const user1 = await User.findOneAndUpdate(
-          { auth0Id: userId },
-          { googleSyncActive: true },
-          { new: true}
-        );
-    await syncAllTasks(userId);
+    try {
+      const user1 = await User.findOneAndUpdate(
+            { auth0Id: userId },
+            { googleSyncActive: true },
+            { new: true}
+          );
+      await syncAllTasks(userId);
 
-    res.status(200).json({ message: "Tasks synced with Google Calendar" });
+      res.status(200).json({ message: "Tasks synced with Google Calendar" });
+    } catch (googleErr: any) {
+      // detect token expiration
+      console.warn("Google token invalid/expired, user must re-consent");
+
+      await User.findOneAndUpdate(
+        { auth0Id: userId },
+        { googleSyncActive: false, googleTokens: null }
+      );
+
+      return res.status(200).json({ redirectToConsent: true });
+    } 
   } catch (err) {
     console.error("Error syncing tasks:", err);
     res.status(500).json({ message: "Sync failed" });

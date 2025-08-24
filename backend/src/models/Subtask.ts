@@ -9,7 +9,12 @@ const subtaskSchema = new mongoose.Schema({
   category: { type: Schema.Types.ObjectId, ref: "Category" },
   completed: { type: Boolean, default: false },
   status: {type: String, default: "todo"},
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  timeBlock: {
+    start: Date,
+    end: Date,
+    durationMinutes: Number,
+  },
 });
 
 export default mongoose.models.Subtask || mongoose.model("Subtask", subtaskSchema);

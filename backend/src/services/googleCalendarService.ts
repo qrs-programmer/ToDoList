@@ -70,11 +70,11 @@ export async function syncAllTasks(userId: string) {
           summary: task.title,
           description: task.description,
           start: {
-            dateTime: new Date(task.createdAt).toISOString(),
+            dateTime: new Date(task.timeBlock.start).toISOString(),
             timeZone: "America/New_York",
           },
           end: {
-            dateTime: new Date(task.createdAt.getTime() + 60 * 60 * 1000).toISOString(),
+            dateTime: new Date(task.timeBlock.end).toISOString(),
             timeZone: "America/New_York",
           },
         };

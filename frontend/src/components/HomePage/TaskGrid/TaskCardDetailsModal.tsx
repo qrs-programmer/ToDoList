@@ -31,6 +31,10 @@ const TaskCardDetailsModal: React.FC<TaskCardDetailsModalProps> = ({
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
     task.category?._id || ""
   );
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [duration, setDuration] = useState(60);
+
   const [subtasks, setSubtasks] = useState<Subtask[]>([]);
   function isTask(task: Task | Subtask): task is Task {
     return "subtasks" in task;
@@ -44,6 +48,19 @@ const TaskCardDetailsModal: React.FC<TaskCardDetailsModalProps> = ({
     setFetchTrigger((prev) => !prev);
     onTaskCreated();
   };
+
+  function formatTimeForInput(date: Date) {
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    return `${hours}:${minutes}`;
+  }
+
+  function formatDateForInput(date: Date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
 
   const fetchTasks = async () => {
     try {
@@ -66,6 +83,8 @@ const TaskCardDetailsModal: React.FC<TaskCardDetailsModalProps> = ({
 
     const category = categories.find((cat) => cat._id === selectedCategoryId);
     console.log(category);
+    const start = new Date(`${date}T${time}`);
+    const end = new Date(start.getTime() + duration * 60000);
     if (isTask(task)) {
       const newTask: Task = {
         userId,
@@ -74,6 +93,11 @@ const TaskCardDetailsModal: React.FC<TaskCardDetailsModalProps> = ({
         points,
         category,
         status,
+        timeBlock: {
+          start,
+          end,
+          durationMinutes: duration,
+        },
       };
 
       try {
@@ -95,6 +119,11 @@ const TaskCardDetailsModal: React.FC<TaskCardDetailsModalProps> = ({
         points,
         category,
         status,
+        timeBlock: {
+          start,
+          end,
+          durationMinutes: duration,
+        },
       };
       try {
         const response = await axios.put(
@@ -117,6 +146,15 @@ const TaskCardDetailsModal: React.FC<TaskCardDetailsModalProps> = ({
       setDescription(task.description.valueOf());
       setPoints(task.points.valueOf());
       setSelectedCategoryId(task.category?._id);
+      if (task.timeBlock.start) {
+        setTime(formatTimeForInput(new Date(task.timeBlock.start)));
+      }
+      if (task.timeBlock.start) {
+        setDate(formatDateForInput(new Date(task.timeBlock.start)));
+      }
+      if (task.timeBlock.durationMinutes) {
+        setDuration(task.timeBlock.durationMinutes);
+      }
     }
   }, [show, task]);
 
@@ -158,6 +196,35 @@ const TaskCardDetailsModal: React.FC<TaskCardDetailsModalProps> = ({
                 onChange={(e) => setDescription(e.target.value)}
                 rows={5}
               />
+            </div>
+
+            <div className="date-time-group">
+              <label>
+                Date:
+                <input
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                />
+              </label>
+              <label>
+                Start Time:
+                <input
+                  type="time"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                />
+              </label>
+              <label>
+                Duration (minutes):
+                <input
+                  type="number"
+                  min={15}
+                  step={15}
+                  value={duration}
+                  onChange={(e) => setDuration(Number(e.target.value))}
+                />
+              </label>
             </div>
 
             <div className="form-grid">

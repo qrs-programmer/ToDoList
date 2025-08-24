@@ -12,4 +12,9 @@ export interface Subtask {
   status: String;
   createdAt?: Date;
   _id?: any;
+  timeBlock: {
+    start: Date;
+    end: Date;
+    durationMinutes: number;
+  };
 }

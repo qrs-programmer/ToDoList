@@ -11,6 +11,11 @@ export interface TaskDocument extends Document {
   googleEventId?: string;
   syncedWithGoogle: boolean;
   deleted?: boolean;
+  timeBlock: {
+    start: Date,
+    end: Date,
+    durationMinutes: number,
+  };
 }
 
 const taskSchema = new mongoose.Schema({
@@ -25,7 +30,12 @@ const taskSchema = new mongoose.Schema({
   subtasks: [{ type: Schema.Types.ObjectId, ref: "Subtask", default: [] }],
   googleEventId: { type: String, default: null },
   syncedWithGoogle: { type: Boolean, default: false },
-  deleted: { type: Boolean, default: false }
+  deleted: { type: Boolean, default: false },
+  timeBlock: {
+    start: Date,
+    end: Date,
+    durationMinutes: Number,
+  },
 });
 
 export default mongoose.models.Task || mongoose.model("Task", taskSchema);

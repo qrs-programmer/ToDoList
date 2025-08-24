@@ -22,6 +22,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onTaskCreated }) => {
 
   async function handleStatusUpdate(status: string): Promise<void> {
     const newTask: Task = {
+      ...task,
       userId: task.userId,
       title: task.title,
       description: task.description,

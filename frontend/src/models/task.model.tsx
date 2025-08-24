@@ -14,4 +14,9 @@ export interface Task {
   subtasks?: Subtask[];
   syncedWithGoogle?: boolean;
   deleted?: boolean;
+  timeBlock: {
+    start: Date;
+    end: Date;
+    durationMinutes: number;
+  };
 }
