@@ -5,6 +5,7 @@ import CreateProjectModal from "./CreateProjectModal";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import GoogleCalendar from "../GoogleCalendar";
+import GeminiChatButton from "./GeminiChatButton";
 
 const Sidebar: React.FC = () => {
   const { user, isAuthenticated } = useAuth0();
@@ -94,6 +95,7 @@ const Sidebar: React.FC = () => {
         ))}
       </ul>
       <GoogleCalendar></GoogleCalendar>
+      <GeminiChatButton></GeminiChatButton>
     </aside>
   );
 };

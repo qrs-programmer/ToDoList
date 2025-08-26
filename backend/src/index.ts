@@ -11,6 +11,7 @@ import googleAuthRoutes from "./routes/googleAuthRoutes";
 import userRoutes from "./routes/userRoutes";
 import calendarRoutes from "./routes/calendarRoutes";
 import calendarSyncRoutes from "./routes/calendarSyncRoutes";
+import geminiRoutes from "./routes/geminiRoutes";
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use("/api/tasks", taskRoutes);
 app.use("/api/subtasks", subtaskRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/gemini", geminiRoutes);
 
 app.get("/", (req: any, res: any) => {
   res.send("API is running...");
