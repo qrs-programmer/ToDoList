@@ -95,7 +95,6 @@ const Sidebar: React.FC = () => {
         ))}
       </ul>
       <GoogleCalendar></GoogleCalendar>
-      <GeminiChatButton></GeminiChatButton>
     </aside>
   );
 };

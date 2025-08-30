@@ -6,6 +6,7 @@ import { Task } from "../../models/task.model";
 import TaskGrid from "./TaskGrid/TaskGrid";
 import Sidebar from "./Sidebar";
 import { useCategories } from "../../context/CategoryContext";
+import GeminiChatButton from "./GeminiChatButton";
 
 const HomePage: React.FC = () => {
   const { user, isAuthenticated } = useAuth0();
@@ -63,6 +64,7 @@ const HomePage: React.FC = () => {
         </p>
         <TaskGrid tasks={tasks} onTaskCreated={handleTaskCreated} />
       </div>
+      <GeminiChatButton onTaskCreated={handleTaskCreated}></GeminiChatButton>
     </div>
   );
 };

@@ -22,7 +22,7 @@ const taskSchema = new mongoose.Schema({
   userId: String,
   title: String,
   description: String,
-  points: Number,
+  points: { type: Number, default: 0 },
   category: { type: Schema.Types.ObjectId, ref: "Category" },
   completed: { type: Boolean, default: false },
   status: {type: String, default: "todo"},
