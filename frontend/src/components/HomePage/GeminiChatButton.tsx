@@ -10,14 +10,29 @@ type GeminiChatButton = {
 
 const GeminiChatButton: React.FC<GeminiChatButton> = ({ onTaskCreated }) => {
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("idle");
   const { user } = useAuth0();
   const [messages, setMessages] = useState<Chat[]>([]);
   const [input, setInput] = useState("");
 
+  const getStatusText = () => {
+    switch (status) {
+      case "loading":
+        return "";
+      case "success":
+        return "Created";
+      case "error":
+        return "Retry";
+      default:
+        return "Send";
+    }
+  };
+
   const handleClick = async () => {
     setLoading(true);
     try {
-      setInput("Creating Task...");
+      setStatus("loading");
+      setInput("");
       const res = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/gemini`,
         {
@@ -27,26 +42,37 @@ const GeminiChatButton: React.FC<GeminiChatButton> = ({ onTaskCreated }) => {
       );
       console.log("AI Response:", res.data);
       onTaskCreated();
-      setInput("Task Created ✅");
+      setStatus("success");
+      //setInput("Created ✅");
     } catch (err) {
       console.error(err);
-      setInput("Retry ❌");
+      setStatus("error");
+      //setInput("Retry ❌");
     } finally {
       setLoading(false);
-      setTimeout(() => setInput(""), 2000);
+      setTimeout(() => setStatus("idle"), 2000);
+      //setTimeout(() => setInput(""), 2000);
     }
   };
 
   return (
     <div className="chat-input-container">
       <input
-        className="chat-input"
+        className={`chat-input`}
         value={input}
         onChange={(e) => setInput(e.target.value)}
         placeholder="Type your task..."
       />
-      <button className="chat-send-btn" onClick={handleClick}>
-        Send
+      <button
+        className={`chat-send-btn ${status}`}
+        onClick={handleClick}
+        disabled={
+          status === "loading" || status === "success" || status === "error"
+        }
+      >
+        <div className={status === "loading" ? "spinner" : ""}>
+          {getStatusText()}
+        </div>
       </button>
     </div>
   );

@@ -34,7 +34,10 @@ router.post("/", async (req: any, res: any) => {
     - Respond ONLY with valid JSON.
     - Do NOT include markdown formatting.
     - Do NOT include code fences (\`\`\`).
-    - Do NOT include any extra text.`
+    - Do NOT include any extra text.
+    
+    Here is the prompt: ${prompt}
+    `
 
     if (!chatHistoryMap.has(userId)) {
       chatHistoryMap.set(userId, [
@@ -45,12 +48,12 @@ router.post("/", async (req: any, res: any) => {
     const history = chatHistoryMap.get(userId)!;
     console.log(history);
     history.push({ role: "user", parts: [{text: prompt}] });
-    const response = await generateTaskProperties(history, userId);
+    const response = await generateTaskProperties(systemRules, userId);
     history.push({ role: "model", parts: [{text: response.confirmationMessage}] });
     res.json({ history, response });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "AI parsing failed" });
+  } catch (error: any) {
+    console.error("Task creation error:", error.message);
+    res.status(500).json({ error: error.message || "AI parsing failed" });
   }
 });
 

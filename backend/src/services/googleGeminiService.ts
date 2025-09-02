@@ -8,12 +8,11 @@ interface Chat {
   parts: [{ text: string }]
 }
 
-export async function generateTaskProperties(history: Chat[], userId: string) {
-  const today = new Date().toISOString(); 
-  console.log(today);
+export async function generateTaskProperties(prompt: string, userId: string) {
+
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
-    contents: history,
+    contents: prompt,
   });
 
   const text = response.text;
@@ -29,11 +28,7 @@ export async function generateTaskProperties(history: Chat[], userId: string) {
   };
   } catch (err) {
     console.error("Failed to parse AI response:", text);
-    
-    return {
-    confirmationMessage: "⚠️ AI response was not valid JSON",
-    task: null,
-  };
+    throw new Error("AI did not return valid JSON");
   }
 }
 
