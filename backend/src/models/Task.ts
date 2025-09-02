@@ -32,9 +32,9 @@ const taskSchema = new mongoose.Schema({
   syncedWithGoogle: { type: Boolean, default: false },
   deleted: { type: Boolean, default: false },
   timeBlock: {
-    start: Date,
-    end: Date,
-    durationMinutes: Number,
+    start: { type: Date, default: Date.now },
+    end: { type: Date, default: () => new Date(Date.now() + 60 * 60 * 1000)},
+    durationMinutes: { type: Number, default: 60},
   },
 });
 

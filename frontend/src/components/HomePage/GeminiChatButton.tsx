@@ -17,6 +17,7 @@ const GeminiChatButton: React.FC<GeminiChatButton> = ({ onTaskCreated }) => {
   const handleClick = async () => {
     setLoading(true);
     try {
+      setInput("Creating Task...");
       const res = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/gemini`,
         {
@@ -26,11 +27,13 @@ const GeminiChatButton: React.FC<GeminiChatButton> = ({ onTaskCreated }) => {
       );
       console.log("AI Response:", res.data);
       onTaskCreated();
+      setInput("Task Created ✅");
     } catch (err) {
       console.error(err);
+      setInput("Retry ❌");
     } finally {
       setLoading(false);
-      setInput("");
+      setTimeout(() => setInput(""), 2000);
     }
   };
 
