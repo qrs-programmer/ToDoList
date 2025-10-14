@@ -40,7 +40,7 @@ app.get("*", (req, res) => {
     res.status(404).send("API route not found");
     return;
   }
-  res.sendFile(path.join(rootDir, "frontend", "build", "index.html"));
+  res.sendFile(path.join(rootDir, "../frontend", "build", "index.html"));
 });
 
 const PORT = process.env.PORT || 5000;
