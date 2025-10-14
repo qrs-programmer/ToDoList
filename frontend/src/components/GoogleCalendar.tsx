@@ -18,7 +18,7 @@ const GoogleCalendar: React.FC = () => {
         console.log(response);
         if (response.data.redirectToConsent) {
           // Redirect to OAuth consent flow
-          window.location.href = `http://localhost:5000/auth/google/auth0Id?auth0Id=${user?.sub}`;
+          window.location.href = `${process.env.REACT_APP_API_URL}/auth/google/auth0Id?auth0Id=${user?.sub}`;
         } else {
           console.log("Tasks synced to Google Calendar!");
         }

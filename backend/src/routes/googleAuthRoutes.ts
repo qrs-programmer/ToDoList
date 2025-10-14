@@ -39,7 +39,7 @@ router.get("/callback", async (req: any, res: any) => {
       }
     );
     await syncAllTasks(auth0Id);
-    res.redirect(`http://localhost:3000/home`);
+    res.redirect(`${process.env.CLIENT_URL}/home`);
   } catch (err) {
     console.error("Google Auth failed", err);
     res.status(500).send("Auth failed");
