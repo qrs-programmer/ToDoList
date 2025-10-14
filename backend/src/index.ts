@@ -12,6 +12,7 @@ import userRoutes from "./routes/userRoutes";
 import calendarRoutes from "./routes/calendarRoutes";
 import calendarSyncRoutes from "./routes/calendarSyncRoutes";
 import geminiRoutes from "./routes/geminiRoutes";
+import path from "path";
 
 dotenv.config();
 
@@ -20,6 +21,9 @@ connectDB();
 
 app.use(cors());
 app.use(express.json());
+
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, "frontend", "build")));
 
 app.use("/auth/google", googleAuthRoutes);
 app.use("/api/google/events", calendarRoutes);
@@ -30,8 +34,12 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/gemini", geminiRoutes);
 
-app.get("/", (req: any, res: any) => {
-  res.send("API is running...");
+app.get("*", (req, res) => {
+  if (req.path.startsWith("/api")) {
+    res.status(404).send("API route not found");
+    return;
+  }
+  res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
 });
 
 const PORT = process.env.PORT || 5000;
