@@ -23,12 +23,12 @@ export async function generateTaskProperties(prompt: string, userId: string) {
     let parsed = JSON.parse(text!);
     parsed.userId = userId;
     const task = new Task(parsed);
-    await task.save();
     const user = await User.findOne({ auth0Id: task.userId })
     if (user?.googleSyncActive) {
       const res = await createGoogleCalendarEvent(task, task.userId);
       task.googleEventId = res;
     }
+    await task.save();
     return {
     confirmationMessage: "✅ Task parsed successfully",
     task: parsed,

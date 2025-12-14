@@ -54,6 +54,7 @@ router.post("/", async (req: any, res: any) => {
 
         if (user?.googleSyncActive && deletedTask.googleEventId) {
           await deleteGoogleCalendarEvent(deletedTask.googleEventId, deletedTask.userId);
+          await Task.findByIdAndDelete(req.params.id);
         }
 
         res.status(200).json({message: "Task deleted successfully", task: deletedTask});
