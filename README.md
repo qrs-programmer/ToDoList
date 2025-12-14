@@ -51,5 +51,5 @@ This project is **still in development**.
 While the main features are functional, there are some known bugs and ongoing improvements planned, including:
 - Enhanced error handling  
 - UI/UX refinements  
-- Google Calendar API synchronization 
+- Subtask management 
 
