@@ -67,7 +67,6 @@ const TaskCardDetailsModal: React.FC<TaskCardDetailsModalProps> = ({
       const res = await axios.get(
         `${process.env.REACT_APP_API_URL}/api/subtasks?userId=${userId}&parentTask=${task._id}`
       );
-      console.log(res.data);
       setSubtasks(res.data);
     } catch (error) {
       console.log("Error fetching subtasks:", error);
@@ -82,7 +81,6 @@ const TaskCardDetailsModal: React.FC<TaskCardDetailsModalProps> = ({
     e.preventDefault();
 
     const category = categories.find((cat) => cat._id === selectedCategoryId);
-    console.log(category);
     const start = new Date(`${date}T${time}`);
     const end = new Date(start.getTime() + duration * 60000);
     if (isTask(task)) {

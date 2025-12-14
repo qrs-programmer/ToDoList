@@ -40,7 +40,6 @@ const GeminiChatButton: React.FC<GeminiChatButton> = ({ onTaskCreated }) => {
           prompt: input,
         }
       );
-      console.log("AI Response:", res.data);
       onTaskCreated();
       setStatus("success");
       //setInput("Created ✅");

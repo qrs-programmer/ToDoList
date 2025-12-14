@@ -11,7 +11,6 @@ const DeleteTaskButton: React.FC<DeleteTaskButtonProps> = ({
   task,
   onTaskCreated,
 }) => {
-  console.log(task._id);
   const handleDelete = async () => {
     try {
       const response = await axios.delete(

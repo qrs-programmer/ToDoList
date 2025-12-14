@@ -15,7 +15,6 @@ const GoogleCalendar: React.FC = () => {
           `${process.env.REACT_APP_API_URL}/api/google/sync`,
           { userId: user?.sub }
         );
-        console.log(response);
         if (response.data.redirectToConsent) {
           // Redirect to OAuth consent flow
           window.location.href = `${process.env.REACT_APP_API_URL}/auth/google/auth0Id?auth0Id=${user?.sub}`;

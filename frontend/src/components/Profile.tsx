@@ -8,7 +8,6 @@ const Profile: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
 
   if (isLoading) return <p>Loading...</p>;
-  console.log(isAuthenticated);
   return (
     <div>
       {!isAuthenticated ? (

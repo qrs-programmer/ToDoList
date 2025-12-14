@@ -42,13 +42,10 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
     e.preventDefault();
 
     const category = categories.find((cat) => cat._id === selectedCategoryId);
-    console.log(category);
 
     try {
       let start = new Date();
       let end = new Date(start.getTime() + 60 * 60000);
-      console.log(start.getHours());
-      console.log(start.getDate());
       if (date !== "" && time !== "") {
         start = new Date(`${date}T${time}`);
         end = new Date(start.getTime() + duration * 60000);
@@ -74,7 +71,6 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         );
         console.log("Task created:", response.data);
       } else if (taskType === "subtask") {
-        console.log("CREATING SUBTASK");
         const newSubtask: Subtask = {
           userId,
           parentTask: task!,

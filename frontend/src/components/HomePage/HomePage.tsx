@@ -11,7 +11,6 @@ import GeminiChatButton from "./GeminiChatButton";
 const HomePage: React.FC = () => {
   const { user, isAuthenticated } = useAuth0();
   const userId = user?.sub;
-  console.log(userId);
   const [fetchTrigger, setFetchTrigger] = useState(false);
   const { selectedCategory } = useCategories();
   const handleTaskCreated = () => {
@@ -44,7 +43,6 @@ const HomePage: React.FC = () => {
       const res = await axios.get(
         `${process.env.REACT_APP_API_URL}/api/tasks?userId=${userId}`
       );
-      console.log(res.data);
       setTasks(res.data);
     } catch (error) {
       console.log("Error fetching tasks:", error);
