@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Task } from "../../../models/task.model";
+import "./DeleteTaskButton.css";
 
 type DeleteTaskButtonProps = {
   task: Task;
@@ -24,7 +25,9 @@ const DeleteTaskButton: React.FC<DeleteTaskButtonProps> = ({
   };
   return (
     <div>
-      <button onClick={handleDelete}>Delete</button>
+      <button className="options-menu-button" onClick={handleDelete}>
+        Delete
+      </button>
     </div>
   );
 };

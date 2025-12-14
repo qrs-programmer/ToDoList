@@ -109,20 +109,6 @@
   flex-direction: column;
 }
 
-.options-menu button {
-  background: none;
-  border: none;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-  text-align: left;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.options-menu button:hover {
-  background-color: #f5f5f5;
-}
-
 .dot-completed {
   background-color: #6828a7;
   height: 9px;

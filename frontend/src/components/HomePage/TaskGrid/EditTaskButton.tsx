@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CreateTaskModal from "./CreateTaskModal";
 import { Task } from "../../../models/task.model";
 import TaskCardDetailsModal from "./TaskCardDetailsModal";
+import "./EditTaskButton.css";
 
 type EditTaskButtonProps = {
   onTaskCreated: any;
@@ -15,7 +16,12 @@ const EditTaskButton: React.FC<EditTaskButtonProps> = ({
   const [showModal, setShowModal] = useState(false);
   return (
     <div>
-      <button onClick={() => setShowModal(true)}>Edit</button>
+      <button
+        className="options-menu-button"
+        onClick={() => setShowModal(true)}
+      >
+        Edit
+      </button>
       <TaskCardDetailsModal
         show={showModal}
         onClose={() => setShowModal(false)}
