@@ -13,11 +13,11 @@ export async function createGoogleCalendarEvent(task : TaskDocument, userId: str
       summary: task.title,
       description: task.description,
       start: {
-        dateTime: new Date(task.createdAt).toISOString(),
+        dateTime: new Date(task.timeBlock.start).toISOString(),
         timeZone: "America/New_York",
       },
       end: {
-        dateTime: new Date(task.createdAt.getTime() + 60 * 60 * 1000).toISOString(),
+        dateTime: new Date(task.timeBlock.end).toISOString(),
         timeZone: "America/New_York",
       },
     },
@@ -37,11 +37,11 @@ export async function updateGoogleCalendarEvent(task: TaskDocument, userId: stri
       summary: task.title,
       description: task.description,
       start: {
-        dateTime: new Date(task.createdAt).toISOString(),
+        dateTime: new Date(task.timeBlock.start).toISOString(),
         timeZone: "America/New_York",
       },
       end: {
-        dateTime: new Date(task.createdAt.getTime() + 60 * 60 * 1000).toISOString(),
+        dateTime: new Date(task.timeBlock.end).toISOString(),
         timeZone: "America/New_York",
       },
     },
