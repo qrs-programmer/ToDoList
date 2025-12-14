@@ -1,5 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import Task from "../models/Task";
+import User from "../models/User";
+import { createGoogleCalendarEvent } from "./googleCalendarService";
 
 const ai = new GoogleGenAI({});
 
@@ -22,6 +24,11 @@ export async function generateTaskProperties(prompt: string, userId: string) {
     parsed.userId = userId;
     const task = new Task(parsed);
     await task.save();
+    const user = await User.findOne({ auth0Id: task.userId })
+    if (user?.googleSyncActive) {
+      const res = await createGoogleCalendarEvent(task, task.userId);
+      task.googleEventId = res;
+    }
     return {
     confirmationMessage: "✅ Task parsed successfully",
     task: parsed,
